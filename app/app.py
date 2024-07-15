@@ -37,17 +37,17 @@ for task in tasks:
     with task_expander:
         st.write(task.get('description', ''))
         st.write('Due Date: ' + task.get('due_date'))
-        task_completed = st.checkbox("Completed", value=task['completed'], key=f"completed_{task['id']}")
+        task_completed = st.checkbox("Completed", value=task['completed'])
         col1, col2 = st.columns([1, 1])
         with col1:
-            if st.button(f"Update", key=f"update_{task['id']}"):
+            if st.button(f"Update"):
                 st.session_state.update_mode[task['id']] = True
 
             if st.session_state.update_mode.get(task['id'], False):
-                task_title = st.text_input("New Title", value=task['title'], key=f"title_{task['id']}")
-                task_description = st.text_area("New Description", value=task.get('description', ''), key=f"desc_{task['id']}")
-                task_due_date = st.date_input("New Due Date", value=datetime.fromisoformat(task['due_date']) if task['due_date'] else datetime.now(), key=f"due_date_{task['id']}")
-                if st.button("Save", key=f"save_{task['id']}"):
+                task_title = st.text_input("New Title", value=task['title'])
+                task_description = st.text_area("New Description", value=task.get('description', ''))
+                task_due_date = st.date_input("New Due Date", value=datetime.fromisoformat(task['due_date']) if task['due_date'] else datetime.now())
+                if st.button("Save"):
                     updated_task = {
                         "id": task['id'],
                         "title": task_title,
@@ -60,7 +60,7 @@ for task in tasks:
                     st.session_state.update_mode[task['id']] = False
                     st.rerun()
         with col2:
-            if st.button(f"Delete", key=f"delete_{task['id']}"):
+            if st.button(f"Delete"):
                 delete_task(task['id'])
                 st.rerun()
 
