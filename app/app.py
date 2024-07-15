@@ -22,7 +22,7 @@ def delete_task(task_id):
 
 st.title("To-Do List App")
 
-# Viewing Tasks and Managing Buttons
+# View Tasks
 st.header("Your Tasks")
 tasks = fetch_tasks()
 
