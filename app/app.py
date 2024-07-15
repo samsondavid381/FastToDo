@@ -2,22 +2,22 @@ import streamlit as st
 import requests
 from datetime import datetime
 
-API_URL = "http://127.0.0.1:8000"
+URL = "http://127.0.0.1:8000"
 
 def fetch_tasks():
-    response = requests.get(f"{API_URL}/tasks")
+    response = requests.get(f"{URL}/tasks")
     return response.json()
 
 def create_task(task):
-    response = requests.post(f"{API_URL}/tasks", json=task)
+    response = requests.post(f"{URL}/tasks", json=task)
     return response.json()
 
 def update_task(task_id, task):
-    response = requests.put(f"{API_URL}/tasks/{task_id}", json=task)
+    response = requests.put(f"{URL}/tasks/{task_id}", json=task)
     return response.json()
 
 def delete_task(task_id):
-    response = requests.delete(f"{API_URL}/tasks/{task_id}")
+    response = requests.delete(f"{URL}/tasks/{task_id}")
     return response.json()
 
 st.title("To-Do List App")
