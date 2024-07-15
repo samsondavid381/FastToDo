@@ -32,10 +32,11 @@ if 'update_mode' not in st.session_state:
 for task in tasks:
     task_expander = st.expander(f"{task['title']}")
     task.setdefault('completed', False)
-    task.setdefault('date_created', datetime.now().isoformat())
+    task.setdefault('date_created', datetime.now().date())
     task.setdefault('due_date', None)
     with task_expander:
         st.write(task.get('description', ''))
+        st.write('Due Date: ' + task.get('due_date'))
         task_completed = st.checkbox("Completed", value=task['completed'], key=f"completed_{task['id']}")
         col1, col2 = st.columns([1, 1])
         with col1:
@@ -57,11 +58,11 @@ for task in tasks:
                     }
                     update_task(task['id'], updated_task)
                     st.session_state.update_mode[task['id']] = False
-                    st.experimental_rerun()
+                    st.rerun()
         with col2:
             if st.button(f"Delete", key=f"delete_{task['id']}"):
                 delete_task(task['id'])
-                st.experimental_rerun()
+                st.rerun()
 
 # Adding a New Task
 st.sidebar.header("Add a New Task")
@@ -79,4 +80,4 @@ if st.sidebar.button("Add Task"):
     }
     create_task(new_task)
     st.sidebar.success("Task added successfully!")
-    st.experimental_rerun()
+    st.rerun()
