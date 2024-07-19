@@ -36,8 +36,12 @@ for task in tasks:
     task.setdefault('due_date', None)
     with task_expander:
         st.write(task.get('description', ''))
+        st.write("Subtasks:")
+        #for subtask in task.get('subtasks', []):
+         #   st.write(f"- {subtask}")
+        st.write(task.get('subtasks', ''))
+        task_completed = st.checkbox("Completed")
         st.write('Due Date: ' + task.get('due_date'))
-        task_completed = st.checkbox("Completed", value=task['completed'])
         col1, col2 = st.columns([1, 1])
         with col1:
             if st.button(f"Update"):
@@ -64,7 +68,7 @@ for task in tasks:
                 delete_task(task['id'])
                 st.rerun()
 
-# Adding a New Task
+#New Task
 st.sidebar.header("Add a New Task")
 task_title = st.sidebar.text_input("Title")
 task_description = st.sidebar.text_area("Description")
@@ -76,7 +80,8 @@ if st.sidebar.button("Add Task"):
         "description": task_description,
         "completed": False,
         "date_created": datetime.now().isoformat(),
-        "due_date": task_due_date.isoformat()
+        "due_date": task_due_date.isoformat(),
+        "subtasks": ""
     }
     create_task(new_task)
     st.sidebar.success("Task added successfully!")
