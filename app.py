@@ -50,7 +50,8 @@ if 'update_mode' not in st.session_state:
 
 for task in tasks:
     task_class = "completed-task" if task['completed'] else ""
-    with st.expander(f"{task['title']}", expanded=False) as task_expander:
+    expander_text = f"{task['title']} | Completed" if task['completed'] else f"{task['title']}"
+    with st.expander(expander_text, expanded=False) as task_expander:
         st.write(f"Description: {task.get('description', '')}")
         st.write(f"Suggested Rewriting: {task.get('suggested_rewriting', '')}")
         st.write(f"Estimated Time: {task.get('estimated_time', '')}")

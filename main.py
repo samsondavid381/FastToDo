@@ -27,26 +27,29 @@ class Task(BaseModel):
 
 tasks: List[Task] = []
 
-def anthropic_model(task_title: str, task_description: str) -> dict:
+def anthropic_model(task_title: str, task_description: str, task_prio: str, task_tags: List[str]) -> dict:
     try:
         with open('prompt.txt', 'r') as file:
             prompt = file.read().strip()
+        tags_string = ''.join(task_tags)
         prompt = prompt.replace("{TASK_TITLE}", task_title)
         prompt = prompt.replace("{TASK_DESCRIPTION}", task_description)
-        
+        prompt = prompt.replace("{TASK_PRIO}", task_prio)
+        prompt = prompt.replace("{TASK_TAGS}", tags_string)
         response = completion(
             model="claude-3-5-sonnet-20240620",
             messages=[{"content": prompt, "role": "user"}],
         )
         content = response['choices'][0]['message']['content']
-        parsed_content = json.loads(content)
+        dict_content = json.loads(content)
         result = {
-            "suggested_rewriting": parsed_content.get("suggested_rewriting", ""),
-            "estimated_time": parsed_content.get("estimated_time", ""),
-            "subtasks": parsed_content.get("subtasks", []),
-            "tags": parsed_content.get("tags", []),
-            "prioritization": parsed_content.get("prio", "")
+            "suggested_rewriting": dict_content.get("suggested_rewriting", ""),
+            "estimated_time": dict_content.get("estimated_time", ""),
+            "subtasks": dict_content.get("subtasks", []),
+            "tags": dict_content.get("tags", task_tags),
+            "prioritization": dict_content.get("prio", task_prio)
         }
+        
         return result
     except Exception as e:
         return {
@@ -65,7 +68,7 @@ def get_tasks():
 def create_task(task: Task):
     try:
         task.id = len(tasks) + 1
-        response = anthropic_model(task.title, task.description)
+        response = anthropic_model(task.title, task.description, task.prio, task.tags)
         # add AI response to task fields
         task.suggested_rewriting = response.get("suggested_rewriting", "")
         task.estimated_time = response.get("estimated_time", "")
@@ -86,7 +89,7 @@ def update_task(task_id: int, updated_task: Task):
             updated_task.id = task_id
             #rerun AI model if task was changed
             if updated_task.title != task.title or updated_task.description != task.description:
-                response = anthropic_model(updated_task.title, updated_task.description)
+                response = anthropic_model(updated_task.title, updated_task.description, updated_task.prio, updated_task.tags)
                 updated_task.suggested_rewriting = response.get("suggested_rewriting", "")
                 updated_task.estimated_time = response.get("estimated_time", "")
                 updated_task.subtasks = response.get("subtasks", [])
