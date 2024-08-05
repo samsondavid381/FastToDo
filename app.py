@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 import json
 from datetime import datetime, date
-import time as t
+import time
 
 URL = "http://127.0.0.1:8000"
 def date_time_encoder(obj):
