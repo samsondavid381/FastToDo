@@ -43,7 +43,7 @@ st.markdown("""
         margin-right: 5px;
         font-size: 12px;
         background-color: #5E7CE2;
-        color: #CFDEE7;
+        color: #000000;
     }
     .tags-container {
         display: flex;
@@ -108,7 +108,7 @@ with st.sidebar:
     new_task_title = st.text_input("Task Title")
     new_task_description = st.text_area("Task Description")
     new_task_due_date = st.date_input("Due Date")
-    new_task_priority = st.selectbox("Priority", ["", "🟢 Low", "🟡 Medium", "🔴 High"])
+    new_task_priority = st.selectbox("Priority", ["", "Low", "Medium", "High"])
     new_task_tags = st.text_input("Tags (comma-separated)")
     if st.button("📝 Add Task"):
         new_task = {
@@ -156,14 +156,14 @@ elif sort_priority == "Low to High":
 
 def get_priority_emoji(priority):
     priority = priority.lower()
-    if priority == "🔴 high":
+    if priority == "high":
         return "🔴"
-    elif priority == "🟡 medium":
+    elif priority == "medium":
         return "🟡"
-    elif priority == "🟢 low":
+    elif priority == "low":
         return "🟢"
     else:
-        return "⚪"
+        return "🟢"
 
 def display_task(task, is_complete):
     priority_emoji = get_priority_emoji(task.get('prio', ''))
@@ -187,7 +187,7 @@ def display_task(task, is_complete):
         col1, col2 = st.columns(2)
         with col1:
             if is_complete:
-                if st.button(f"😑 Unomplete", key=f"updatebutton{task['id']}"):
+                if st.button(f"😑 Uncomplete", key=f"updatebutton{task['id']}"):
                     task['completed'] = False
                     update_task(task['id'], task)
                     st.rerun()
@@ -208,8 +208,9 @@ def display_task(task, is_complete):
                         task_title = st.text_input("New Title", value=task['title'], key=f"updatetitle {task['id']}")
                         task_description = st.text_area("New Description", value=task.get('description', ''), key=f"updatedesc {task['id']}")
                         task_due_date = st.date_input("New Due Date", value=datetime.fromisoformat(task['due_date']) if task['due_date'] else datetime.now(), key=f"updatedate {task['id']}")
-                        task_priority = st.selectbox("Priority", ["", "🟢 Low", "🟡 Medium", "🔴 High"],key="updateselectprio")
+                        task_priority = st.selectbox("Priority", ["", "Low", "Medium", "High"],key="updateselectprio")
                         task_tags = st.text_input("Tags (comma-separated)",key="updatetags")
+                        
                         if st.button("Save", key=f"savebut {task['id']}"):
                             updated_task = {
                                 "id": task['id'],
@@ -221,8 +222,8 @@ def display_task(task, is_complete):
                                 "suggested_rewriting": task.get('suggested_rewriting', ''),
                                 "estimated_time": task.get('estimated_time', ''),
                                 "subtasks": task.get('subtasks', []),
-                                "tags": task.get('tags', []),
-                                "prio": task.get('prio', '')
+                                "tags": [tag.strip() for tag in task_tags.split(',') if tag.strip()] if task_tags else task.get('tags',[]),
+                                "prio": task_priority if task_priority else task.get('prio',"")
                             }
                             result = update_task(task['id'], updated_task)
                             if result:

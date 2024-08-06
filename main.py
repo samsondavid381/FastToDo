@@ -31,7 +31,7 @@ def anthropic_model(task_title: str, task_description: str, task_prio: str, task
     try:
         with open('prompt.txt', 'r') as file:
             prompt = file.read().strip()
-        tags_string = ''.join(task_tags)
+        tags_string = ','.join(task_tags)
         prompt = prompt.replace("{TASK_TITLE}", task_title)
         prompt = prompt.replace("{TASK_DESCRIPTION}", task_description)
         prompt = prompt.replace("{TASK_PRIO}", task_prio)
