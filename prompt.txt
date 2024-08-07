@@ -28,17 +28,7 @@ Follow these steps to process the task and generate the required JSON output:
 6. Provide a short list of tags to categorize the task, if TASK_TAGS is an empty list. If TASK_TAGS is not an empty list, return TASK_TAGS here.
 7. Assign a prioritization level (High, Medium, or Low) based on the task's importance and urgency, if TASK_PRIO is an empty string. If TASK_PRIO is not an empty string, return TASK_PRIO here.
 
-Format your entire response as a valid JSON object with the following structure:
-
-{
-  "title": "{TASK_TITLE}",
-  "description": "{TASK_DESCRIPTION}",
-  "suggested_rewriting": "REWRITTEN_DESCRIPTION",
-  "estimated_time" : "ESTIMATED_TIME",
-  "subtasks": ["SUBTASK1", "SUBTASK2", "SUBTASK3"],
-  "tags": ["TAG1", "TAG2", "TAG3"],
-  "prio": "PRIORITY_LEVEL"
-}
-
 Ensure that your response is a valid JSON object, with no additional text before or after the JSON structure. Use double quotes for all strings and property names. Do not include any explanations or comments outside of the JSON structure.
 If the task title is nonsense, or otherwise garbage, return a JSON object with only the fields provided to you filled, all other fields empty.
+
+Format your entire response as a valid JSON object according to the following schema:
