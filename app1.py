@@ -86,9 +86,6 @@ def delete_task(task_id):
     response = requests.delete(f"{URL}/tasks/{task_id}")
     return response.json()
 
-
-# Existing helper functions (fetch_tasks, create_task, update_task, delete_task) remain the same
-
 def generate_tag_colors(tags):
     colors = {}
     for tag in tags:
